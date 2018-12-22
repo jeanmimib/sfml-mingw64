@@ -11,7 +11,8 @@ $ErrorActionPreference = 'Stop';
 $toolsDir   = "$(Split-Path -parent $MyInvocation.MyCommand.Definition)"
 $url64        = 'https://www.sfml-dev.org/files/SFML-2.5.1-windows-gcc-7.3.0-mingw-64-bit.zip'
 $installationPath = Join-Path (Get-ToolsLocation) $env:ChocolateyPackageName
-
+$sfmlInstall = Join-Path $installationPath -ChildPath "SFML-2.5.1"
+$sfmlbin =  Join-Path $sfmlInstall -ChildPath "bin"
 
 $packageArgs = @{
   packageName   = $env:ChocolateyPackageName
@@ -31,6 +32,8 @@ if (Test-Path $installationPath) {
 }
 Write-Host "Installing to" $installationPath"."
 Install-ChocolateyZipPackage  @packageArgs
+Install-ChocolateyPath -PathToInstall "$sfmlbin" -PathType "Machine"
+Install-ChocolateyEnvironmentVariable -VariableName "SFML_INSTALL" -VariableValue "$sfmlInstall" -VariableType Machine
 
 
 
